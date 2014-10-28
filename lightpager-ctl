@@ -1,0 +1,20 @@
+#!/bin/bash
+
+function norm {
+	echo $1 > /tmp/lightpager_intf.fifo
+}
+
+if [[ $1 == "up" ]] ; then
+    norm $1
+elif [[ $1 == "down" ]] ; then
+    norm $1
+elif [[ $1 == "right" ]] ; then
+    norm $1
+elif [[ $1 == "left" ]] ; then
+    norm $1
+elif [[ $1 == "reload" ]] ; then
+    norm $1
+else
+    echo "$1: unknown command"
+fi
+
