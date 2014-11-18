@@ -10,7 +10,7 @@
 void* _fifo_thread_main( void* _self ) {
 
     main_app_t* self = _self;
-    size_t bytes_read;
+    ssize_t bytes_read;
 
     mkfifo(FIFO_PATH, 00600);
 
@@ -18,11 +18,18 @@ void* _fifo_thread_main( void* _self ) {
     while(1) {
         self->fifo_fd = open( FIFO_PATH, O_RDONLY );
 
+        if( self->fifo_fd < 0 )  {
+            perror("error opening file");
+            sleep(1);
+        }
+
         bytes_read = read( self->fifo_fd, buf, 1024 );
         while( bytes_read > 0 ) {
             self->fifo_read_callback(self, buf, bytes_read);
             bytes_read = read( self->fifo_fd, buf, 1024 );
         }
+
+        close( self->fifo_fd );
     }
 }
 
